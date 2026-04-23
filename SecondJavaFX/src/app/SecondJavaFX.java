@@ -3,6 +3,7 @@ package app;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
@@ -17,10 +18,13 @@ public class SecondJavaFX extends Application {
         line2.setLayoutY(25);
         line3.setLayoutY(50);
 
+        Button button = new Button("Click Me");
+        button.setLayoutY(75);
+
         Circle circle = new Circle(160, 120, 60);
         Polygon triangle = new Polygon(160, 120, 220, 280, 100, 280);
 
-        Group group = new Group(line1, line2, line3, circle, triangle);
+        Group group = new Group(line1, line2, line3, circle, triangle, button);
         Scene scene = new Scene(group, 480, 320);
 
         window.setScene(scene);

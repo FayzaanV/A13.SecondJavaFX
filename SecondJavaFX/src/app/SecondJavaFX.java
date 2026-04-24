@@ -3,7 +3,6 @@ package app;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -15,36 +14,72 @@ import java.util.Random;
 
 
 public class SecondJavaFX extends Application {
+
+    private int scoreCount = 0;
+
+    @SuppressWarnings("static-access")
     @Override
     public void start(final Stage stage) {
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root, 600, 500);
+        
 
         Label score = new Label("Score: 0");
         Button exit = new Button("Exit");
         exit.addEventHandler(ActionEvent.ACTION,
             (event) -> Platform.exit()
         );
+
+        Random random = new Random();
+
+        Pane pane = new Pane();
+        Button[] buttons = new Button[9];
+        for (int i = 0; i < 9; i++) {
+            if (i == 0) {
+                buttons[i] = new Button("Click Me!");
+                buttons[i].addEventHandler(ActionEvent.ACTION,
+                    (event) -> {
+                        scoreCount += 1;
+                        score.setText("Score: " + scoreCount);
+                        scrambleButtons(random, buttons);
+                        exit.requestFocus();
+                    }
+                );
+            } else {
+                buttons[i] = new Button("Click Me?");
+                buttons[i].addEventHandler(ActionEvent.ACTION,
+                    (event) -> {
+                        scoreCount -= 1;
+                        score.setText("Score: " + scoreCount);
+                        scrambleButtons(random, buttons);
+                        exit.requestFocus();
+                    }
+                );
+            }
+            pane.getChildren().add(buttons[i]);
+        }
+
+        scrambleButtons(random, buttons);
+        exit.requestFocus();
+        
+
         root.setTop(score);
         root.setBottom(exit);
         root.setAlignment(exit, Pos.CENTER);
+        root.setCenter(pane);
 
-        Pane buttons = new Pane();
-        Button button1 = new Button("Click Me!");
-        Button button2 = new Button("Click Me?");
-        Button button3 = new Button("Click Me?");
-        Button button4 = new Button("Click Me?");
-        Button button5 = new Button("Click Me?");
-        Button button6 = new Button("Click Me?");
-        Button button7 = new Button("Click Me?");
-        Button button8 = new Button("Click Me?");
-        Button button9 = new Button("Click Me?");
-        buttons.getChildren().addAll(button1, button2, button3, button4, button5, button6, button7, button8, button9);
-        root.setCenter(buttons);
-
+        Scene scene = new Scene(root, 600, 500);
         stage.setTitle("ButtonGame");
         stage.setScene(scene);
         stage.show();
+
+        exit.requestFocus();
+    }
+
+    private void scrambleButtons(Random random, Button[] buttons) {
+        for (Button b : buttons) {
+            b.setLayoutX(random.nextInt(501));
+            b.setLayoutY(random.nextInt(401));
+        }
     }
 
     public static void main(String[] args) {
